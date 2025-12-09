@@ -20,7 +20,7 @@ spec:
         kubernetes.io/arch: amd64
       containers:
       - name: nginx
-        image: batel123d/static-web
+        image: 314525640319.dkr.ecr.us-east-2.amazonaws.com/batel-app:static-web
         ports:
         - name: http
           containerPort: 80
