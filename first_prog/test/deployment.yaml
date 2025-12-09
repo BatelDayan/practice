@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: batel-test-deployment
+  namespace: batel-ns
+  labels:
+    app: batel-test-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: batel-test-app
+  template:
+    metadata:
+      labels:
+        app: batel-test-app
+    spec:
+      nodeSelector:
+        kubernetes.io/os: linux
+        kubernetes.io/arch: amd64
+      containers:
+      - name: nginx
+        image: batel123d/static-web
+        ports:
+        - name: http
+          containerPort: 80
+        imagePullPolicy: IfNotPresent
