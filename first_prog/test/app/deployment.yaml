@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: batel-app
+  namespace: batel-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: batel-app
+  template:
+    metadata:
+      labels:
+        app: batel-app
+    spec:
+      containers:
+      - name: batel-app-container
+        image: 314525640319.dkr.ecr.us-east-2.amazonaws.com/batel-app:latest 
+        command: ["node", "index.js"]
+        env:
+        - name: DB_HOST
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: DB_HOST
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: DB_USER
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: DB_PASSWORD
+        - name: DB_NAME
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: DB_NAME
+        ports:
+        - containerPort: 3000
