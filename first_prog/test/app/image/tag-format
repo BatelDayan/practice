@@ -1,0 +1,7 @@
+# Image tag format: imgMAJOR.MINOR.PATCH
+
+# version bump rules
+
+# BREAKING: <description>  MAJOR +1 (img1.2.3 to img2.0.0)
+# feat: <description>      MINOR +1 (img1.2.3 to img1.3.0)
+# fix / anything else      PATCH +1 (img1.2.3 to img1.2.4)
