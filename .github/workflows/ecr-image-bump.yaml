@@ -1,0 +1,56 @@
+# Image tag format: imgMAJOR.MINOR.PATCH
+
+# version bump rules
+
+# BREAKING: <description>  MAJOR +1 (img1.2.3 to img2.0.0)
+# feat: <description>      MINOR +1 (img1.2.3 to img1.3.0)
+# fix / anything else      PATCH +1 (img1.2.3 to img1.2.4)
+
+
+name: Docker image bump and push
+
+on:
+  push:
+    paths:
+      - "first_prog/test/app/image/**"
+
+jobs:
+  bump-and-push:
+    runs-on: ubuntu-latest
+
+    env:
+      AWS_REGION: us-east-2
+      ECR_REPO: batel-app-img
+      AWS_ACCOUNT_ID: 314525640319
+      AWS_ROLE_ARN: arn:aws:iam::314525640319:role/batel-github
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+    
+      - name: Calculate new semantic version
+        id: semver
+        uses: mathieudutour/github-tag-action@v6.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          default_bump: patch
+
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./first_prog/test/app/image
+          push: true
+          tags: ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO }}:${{ steps.semver.outputs.new_tag }}
