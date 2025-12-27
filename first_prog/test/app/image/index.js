@@ -1,4 +1,4 @@
-/* comment to see if pipeline works well 27.12 */
+/* comment to see if pipeline works well after adding stps */
   const express = require('express');
 const { Client } = require('pg'); 
 const app = express();
