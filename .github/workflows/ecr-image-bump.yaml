@@ -64,7 +64,7 @@ jobs:
         with:
           repository: BatelDayan/batel-app-helm
           path: temp
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.HELM_REPO_TOKEN }}
 
       - name: Install yq
         run: |
