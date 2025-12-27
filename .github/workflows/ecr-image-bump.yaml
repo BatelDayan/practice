@@ -58,3 +58,28 @@ jobs:
           context: ./first_prog/test/app/image
           push: true
           tags: ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO }}:${{ steps.semver.outputs.new_tag }}
+
+      - name: Checkout Helm repo
+        uses: actions/checkout@v4
+        with:
+          repository: BatelDayan/batel-app-helm
+          path: temp
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install yq
+        run: |
+          sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq
+          sudo chmod +x /usr/bin/yq
+
+      - name: Update image tag in Helm values
+        run: |
+          yq eval ".deployment.image.tag = \"${{ steps.semver.outputs.new_tag }}\"" -i temp/values-test.yaml
+
+      - name: Commit and push Helm update
+        run: |
+          cd temp
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add values-test.yaml
+          git commit -m "chore: update image tag to ${{ steps.semver.outputs.new_tag }}"
+          git push    
