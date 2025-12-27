@@ -1,4 +1,4 @@
-/* comment to see if pipeline works well after adding stps */
+/* comment to see if pipeline works well after adding steps */
   const express = require('express');
 const { Client } = require('pg'); 
 const app = express();
