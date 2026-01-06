@@ -81,6 +81,7 @@ jobs:
           cd temp
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git add values-test.yaml
+          git add test-values.yaml
+          git add values.yaml
           git commit -m "chore: update image tag to ${{ steps.semver.outputs.new_tag }}"
           git push    
